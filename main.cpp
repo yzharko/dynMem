@@ -43,7 +43,7 @@ int main(int argc, char ** argv)
   }
  
  int * matrix = new int[rows * cols];
- size_t result = inputArray(std::cin, matrix, rows * cols, rows * cols);
+ size_t result = readArray::inputArray(std::cin, matrix, rows * cols, rows * cols);
  if (!std::cin)
  {
    std::cerr << "Read " << result << " elements...\n";
