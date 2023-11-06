@@ -9,28 +9,9 @@ int main(int argc, char ** argv)
     return 1;
   }
 
-//argv[1] - номер задания
-  char * endOfParcing = nullptr;
-  int num = std::strtoll(argv[1], &endOfParcing, 10);
-  if (num == 0 && endOfParcing == argv[1])
-  {
-    std::cerr << "Cannot parse a value.\n";
-    return 1;
-  }
-  else if (num == 0 && endOfParcing != argv[1])
-  {
-    std::cout << "Num is zero.\n";
-  }
-  else
-  {
-    std::cout << num << "\n";
-  }
-
-// Аналог на "С++"
-  int num = 0;
   try
   {
-    num = std::stoll(argv[1]);
+    int num = std::stoll(argv[1]);
   }
   catch (const std::invalid_argument & e)
   {
@@ -39,23 +20,39 @@ int main(int argc, char ** argv)
   }
 
  //argv[2] - имя файла с матрицей
-  int i = 0;
+  if (num > 2)
+  {
+    //...
+    return 2;
+  }
+  else if (num == 1)
+  {
+    //brr-r
+    return 0;
+  }
+
+  size_t rows = 0, cols = 0;
   {
     std::ifstream input(argv[2]);
-    input >> i;
+    input >> rows, cols;
     if (!input)
     {
-      std::cerr << "Cannot read a number.\n";
-      return 1;
+      std::cerr << "Cannot read an input.\n";
+      return 2;
     }
   }
-  std::cout << i << "\n";
-
-//argv[3] - имя файла для вывода результатов
-  std::ofstream output(argv[3]);
-  output << i << "\n";
+ 
+ int * matrix = new int[rows * cols];
+ size_t result = inputArray(std::cin, matrix, rows * cols, rows * cols);
+ if (!std::cin)
+ {
+   std::cerr << "Read " << result << " elements...\n";
+   delete [] matrix;
+   return 3;
+ }
 
   int ** m1 = nullptr;
+  int ** m2 = nullptr;
   try
   {
     m1 = matrixStuff::createMatrix(rows, cols);
@@ -66,8 +63,17 @@ int main(int argc, char ** argv)
   }
   catch(...)
   {
+    delete [] matrix;
     matrixStuff::freeMatrix(m1, rows, cols);
     matrixStuff::freeMatrix(m2, rows, cols);
     return 3;
   }
+  delete [] matrix;
+
+  //argv[3] - имя файла для вывода результатов
+  {
+    std::ofstream output(argv[3]);
+    output << rows << " " << cols << "\n";
+  }
+  return 0;
 }
