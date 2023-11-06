@@ -11,8 +11,7 @@ size_t readArray::inputArray(std::istream & in, int * matrix, size_t s, size_t t
   {
     if (!(in >> matrix[i]))
     {
-      read = i;
-      return in;
+      return i;
     }
   }
   return std::min(toRead, s);
