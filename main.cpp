@@ -1,37 +1,6 @@
 #include <iostream>
 #include <fstream>
 
-int createMatrix(size_t rows, size_t cols)
-{
-  int rowsPtrs = new int *[rows];
-  for (size_t i = 0; i < rows; ++i)
-  {
-    rowsPtrs[i] = nullptr;
-  }
-  try
-  {
-    for (size_t i = 0; i < rows; ++i)
-    {
-      rowsPtrs[i] = new int[cols];
-    }
-    return rowsPtrs;
-  }
-  catch (const std::bad_alloc & e)
-  {
-    freeMatrix(rowsPtrs, rows, cols);
-    throw;
-  }
-}
-
-void freeMatrix(int ** m, size_t rows, size_t)
-{
-  for (size_t i = 0; i < rows; ++i)
-  {
-    delete [] m[i];
-  }
-  delete [] m;
-}
-
 int main(int argc, char ** argv)
 {
   if (argc != 4)
@@ -89,16 +58,16 @@ int main(int argc, char ** argv)
   int ** m1 = nullptr;
   try
   {
-    m1 = createMatrix(rows, cols);
-    m2 = createMatrix(rows, cols);
+    m1 = matrixStuff::createMatrix(rows, cols);
+    m2 = matrixStuff::createMatrix(rows, cols);
     // go brrr...
-    freeMatrix(m1, rows, cols);
-    freeMatrix(m2, rows, cols);
+    matrixStuff::freeMatrix(m1, rows, cols);
+    matrixStuff::freeMatrix(m2, rows, cols);
   }
   catch(...)
   {
-    freeMatrix(m1, rows, cols);
-    freeMatrix(m2, rows, cols);
+    matrixStuff::freeMatrix(m1, rows, cols);
+    matrixStuff::freeMatrix(m2, rows, cols);
     return 3;
   }
 }
